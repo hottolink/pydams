@@ -14,7 +14,7 @@
 ## インストール
 * まず，DAMSのインストールを行ってください
 	* 本家からdams-\*.tgzを[ダウンロード](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=5)し、展開する。
-	*[インストール](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=2)の手順は，DAMSに同梱のREADMEを参照してください
+	* [インストール](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=2)の手順は，DAMSに同梱のREADMEを参照してください
 	* 本packageでは，共有ライブラリ(`dams.so`) のみを使用します
 	  ヘッダファイルおよび，DAMSに同梱のサンプルプログラムは使用しません
 * 次に，本packageのインストールを行ってください．手順は以下の通りです
