@@ -21,7 +21,7 @@
 
 ```
 git clone https://git.hottolink.com/gitbucket/git/s.mizuki/pydams.git
-cd pydams/pydams
+cd pydams
 # ビルド，テスト，インストールを実行
 make all
 ```
