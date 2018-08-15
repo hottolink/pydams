@@ -10,7 +10,7 @@ try:
     USE_CYTHON = True
 except ImportError:
     USE_CYTHON = False
-    # raise ImportError("it requires Cython to install this package.")
+    raise ImportError("it requires Cython to install this package.")
 
 with open('README.md') as f:
     readme = f.read()

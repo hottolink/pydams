@@ -8,20 +8,20 @@
 * DAMSは，[東京大学空間情報科学研究センターが提供する「CSVアドレスマッチングサービス」および「シンプルジオコーディング実験」](http://newspat.csis.u-tokyo.ac.jp/geocode)にて開発されたソフトウェアです．高速・高精度なジオコーディングを実現します
 
 ## 動作環境
-* Python 2.7.x での動作を確認済みです．ただし文字型はstr型ではなくunicode型を採用しています
-* Python 3.x での動作は未確認です
+* Python 2.7.x/3.5.x での動作を確認済みです
+* 2.7.xの文字型はstr型ではなくunicode型を採用しています
 
 ## インストール
 * まず，DAMSのインストールを行ってください
-	* 本家からdams-\*.tgzを[ダウンロード](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=5)し、展開する。
-	* [インストール](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=2)の手順は，DAMSに同梱のREADMEを参照してください
+	* [本家からダウンロード](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=5) または 同梱のファイル(`../dams/dams-*.tgz`)を展開
+	* インストールの手順は，DAMSに同梱のREADMEを参照してください
 	* 本packageでは，共有ライブラリ(`dams.so`) のみを使用します
 	  ヘッダファイルおよび，DAMSに同梱のサンプルプログラムは使用しません
 * 次に，本packageのインストールを行ってください．手順は以下の通りです
 
 ```
 git clone https://git.hottolink.com/gitbucket/git/s.mizuki/pydams.git
-cd pydams
+cd pydams/pydams
 # ビルド，テスト，インストールを実行
 make all
 ```
