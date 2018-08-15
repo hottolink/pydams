@@ -20,8 +20,8 @@
 * 次に，本packageのインストールを行ってください．手順は以下の通りです
 
 ```
-git clone https://git.hottolink.com/gitbucket/git/s.mizuki/pydams.git
-cd pydams/pydams
+git clone https://github.com/hottolink/pydams.git
+cd pydams
 # ビルド，テスト，インストールを実行
 make all
 ```
