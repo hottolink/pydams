@@ -13,7 +13,7 @@
 
 ## インストール
 * まず，DAMSのインストールを行ってください
-	* [本家からダウンロード](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=5) または 同梱のファイル(`../dams/dams-*.tgz`)を展開
+	* [本家からダウンロード](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=5) 
 	* インストールの手順は，DAMSに同梱のREADMEを参照してください
 	* 本packageでは，共有ライブラリ(`dams.so`) のみを使用します
 	  ヘッダファイルおよび，DAMSに同梱のサンプルプログラムは使用しません
@@ -82,6 +82,10 @@ http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=4
 ```
 
 * `pydams.helpers` には補助関数が定義されています．docstringを確認の上，適宜ご利用ください
+
+## 謝辞
+本リポジトリは，東京大学空間情報科学研究センターによる[ジオコーダDAMS(Distributed Address Matching System)](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=1)を弊社内でより使いやすくする目的で開発しました．
+このような便利かつ有用なツールを無償で公開して下さっている東京大学 空間情報科学研究センターに感謝申し上げます。
 
 ## ライセンス
 * 本packageは Apache License Version 2.0 に準拠します
