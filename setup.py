@@ -45,7 +45,7 @@ setup(
     long_description=readme,
     author='Sakae Mizuki',
     author_email='s.mizuki@hottolink.co.jp',
-    url='https://git.hottolink.com/gitbucket/s.mizuki/pydash',
+    url='https://github.com/hottolink/pydams',
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
     test_suite="tests",
