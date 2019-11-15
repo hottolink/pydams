@@ -8,23 +8,68 @@
 * DAMSは，[東京大学空間情報科学研究センターが提供する「CSVアドレスマッチングサービス」および「シンプルジオコーディング実験」](http://newspat.csis.u-tokyo.ac.jp/geocode)にて開発されたソフトウェアです．高速・高精度なジオコーディングを実現します
 
 ## 動作環境
-* Python 2.7.x/3.6.x での動作を確認済みです
-* 2.7.xの文字型はstr型ではなくunicode型を採用しています
+* Python 2.7.x/3.6.x での動作を確認しています
+	* 2.7.xの文字型は，str型ではなくunicode型を採用しています
+* DAMS Ver. 4.3.4 での動作を確認しています
 
 ## インストール
-* まず，DAMSのインストールを行ってください
-	* [本家からダウンロード](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=5) 
-	* インストールの手順は，DAMSに同梱のREADMEを参照してください
-	* 本packageでは，共有ライブラリ(`dams.so`) のみを使用します
-	  ヘッダファイルおよび，DAMSに同梱のサンプルプログラムは使用しません
-* 次に，本packageのインストールを行ってください．手順は以下の通りです
+* まず，DAMSのインストールを行います．次に，Python binding(=本package: `pydams`)のインストールを行います．
+
+### DAMSのインストール
+* CentOS 7.4 でのインストール手順を紹介します．
+* お使いの環境ではうまくいかないかもしれません．その場合は，DAMSに同梱のREADMEを参照してください．
+
+1. DAMSを[ダウンロード](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=5) して任意のフォルダに解凍します．
 
 ```
+wget http://newspat.csis.u-tokyo.ac.jp/download/dams-4.3.4.tgz
+tar -xzvf dams-4.3.4.tgz
+cd dams-*
+```
+
+2. ビルドを行います．共有ライブラリ(`libdams-4.3.4.so`)が生成されます．
+
+```
+./configure; make
+```
+
+3. 生成された共有ライブラリをインストールして，キャッシュに登録します．
+
+```
+sudo make install
+sudo ldconfig
+ldconfig -v | grep dams
+# 以下のように表示されれば，正常にインストールできています
+>>> libdams-4.3.4.so -> libdams.so
+```
+
+4. 地域語辞書をビルドしてインストールします．
+
+```
+make dic
+sudo make install-dic
+```
+
+### Python bindingのインストール
+1. Python binding(=本package)をリポジトリからクローンして，ビルド・インストールを実行します
+
+```
+cd ../
 git clone https://github.com/hottolink/pydams.git
 cd pydams
-# ビルド，テスト，インストールを実行
+# ビルド・テスト・インストールを実行
 make all
+# Anaconda環境ではテストに失敗することがあるようです．この場合はインストールのみ実行してください
+make install
 ```
+
+2. インストール結果を確認します．`pydams` package が表示されれば，成功です．
+
+```
+pip freeze | grep pydams
+>>> pydams==1.0.3
+```
+
 
 ## 使用方法
 * importしたジオコーダを初期化した上で，`geocode()` または `geocode_simplify()` に住所文字列を渡してください
