@@ -1,0 +1,117 @@
+diff -r -u dams-4.3.4/include/dams.h dams/include/dams.h
+--- dams-4.3.4/include/dams.h	2013-11-12 11:43:40.000000000 +0900
++++ dams/include/dams.h	2020-03-15 23:04:57.022264941 +0900
+@@ -69,27 +69,12 @@
+     }
+   };
+ 
+-  ///
+-  /// @file
+-  /// @brief dams§ŒŒ„≥∞•Ø•È•π°£
+-  ///
+-
+-  class DamsInitException : public std::runtime_error {
+-  public:
+-  DamsInitException(const char* msg) : runtime_error(msg) {}
+-  };
+-	
+-  class DamsException : public std::runtime_error {
+-  public:
+-  DamsException(const char* msg) : runtime_error(msg) {}
+-  };
+-
+   typedef std::vector<AddressElement> Candidate;
+ 	
+   /// @brief ΩÈ¥¸≤Ω§∑§ﬁ§π°£
+   /// @param [in] damsFileName º≠ΩÒ•’•°•§•ÎÃæ
+   /// @exception •’•°•§•Î§¨≥´§±§ §§§ §…°¢ΩÈ¥¸≤Ω§Àº∫«‘§∑§øæÏπÁ
+-  void init(const std::string& damsFileName) throw (DamsInitException);
++  void init(const std::string& damsFileName);
+ 
+   /// @brief •«•’•©•Î•»§Œ•∏•™•≥°º•¿•’•°•§•Î§¨¬∏∫ﬂ§π§Ï§–≥´§§§∆ΩÈ¥¸≤Ω§∑§ﬁ§π°£
+   void init(void);
+@@ -116,7 +101,7 @@
+ 		int& score, 
+ 		std::string& tail, 
+ 		std::vector<Candidate>& candidates, 
+-		const std::string& query) throw (DamsException);
++		const std::string& query);
+ 	
+   /// @brief •«•–•√•∞•‚°º•…§À¿ﬂƒÍ§∑§ﬁ§π°£ΩÈ¥¸≤Ω∏Â§Œ∏∆§”Ω–§∑§Œ§ﬂÕ≠∏˙§«§π°£•«•’•©•Î•»√Õfalse
+   /// @param [in] flag
+diff -r -u dams-4.3.4/lib/DamsWrapper.cpp dams/lib/DamsWrapper.cpp
+--- dams-4.3.4/lib/DamsWrapper.cpp	2015-12-25 08:03:59.000000000 +0900
++++ dams/lib/DamsWrapper.cpp	2020-03-15 23:04:57.023264952 +0900
+@@ -58,7 +58,7 @@
+   }
+ 	
+   // ËæûÊõ∏„Éï„Ç°„Ç§„É´„ÇíÈñã„Åè
+-  void init(const std::string& damsFileName) throw (DamsInitException) {
++  void init(const std::string& damsFileName) {
+     _init();
+     std::string filepath = damsFileName;
+     FILE* fp;
+@@ -68,14 +68,14 @@
+       fp = fopen((filepath + ".dat").c_str(), "r");
+       if (!fp) {
+ 	std::string msg = "Can't open file: " + damsFileName;
+-	throw DamsInitException(msg.c_str());
++	throw std::runtime_error(msg.c_str());
+       }
+     }
+     fclose(fp);
+ 
+     if (openfile(filepath.c_str())) {
+       std::string msg = "Can't open file: " + filepath;
+-      throw DamsInitException(msg.c_str());
++      throw std::runtime_error(msg.c_str());
+     }
+ 
+   }
+@@ -127,7 +127,7 @@
+ 		int& score,
+ 		std::string& tail,
+ 		std::vector<Candidate>& candidates, 
+-		const std::string& q) throw (DamsException) {
++		const std::string& q) {
+     // ÊôÇÈñìË®àÊ∏¨ÈñãÂßã
+     struct timeval tv_start;
+     struct timeval tv_end;
+@@ -150,7 +150,7 @@
+ 
+     tmpvect.Clear();
+     if (euc_query.length() > BUFSIZ - 1) {
+-      throw DamsException("Query too long");
++      throw std::runtime_error("Query too long");
+     }
+ #ifdef DEBUG
+     fprintf(stderr, "original   : '%s'\n", euc_query.c_str());
+@@ -173,14 +173,12 @@
+     fprintf(stderr, "nconverted('%s')\n", query);
+ #endif
+     matchlen = nconverted(euc_query.c_str(), result.rest.c_str()); // original
+-    if (result.maxlen < 0) {
+-      std::string msg = "Unexpected return value detected from nconverted, match length is negative value when processing '" + q + "'";
+-      throw DamsException(msg.c_str());
++    if (result.maxlen < 0 || result.maxlen - abs(matchlen) < 0) {
++      throw std::runtime_error("Unexpected return value detected from nconverted, match length is negative value when processing '" + q + "'");
+     }
+ #ifdef DEBUG
+     fprintf(stderr, "maxlen = %d, query + maxlen = '%s'\n", result.maxlen, euc_query.c_str() + result.maxlen);
+ #endif
+-		
+     // ÁµêÊûú„ÅÆ„Çª„ÉÉ„Éà
+     if (result.score == 0) {
+       tail = q;
+diff -r -u dams-4.3.4/lib/lmatch.cpp dams/lib/lmatch.cpp
+--- dams-4.3.4/lib/lmatch.cpp	2013-11-13 15:00:12.000000000 +0900
++++ dams/lib/lmatch.cpp	2020-03-15 23:04:57.024264962 +0900
+@@ -30,7 +30,7 @@
+   // ∫«ƒπ∞Ï√◊∏°∫˜
+   for (i = 0; i < keylen; i++) {
+     char c = *(keystring + i);
+-    if (!curTry->_nNext) {
++    if (!curTry || !curTry->_nNext) {
+       //  ∏ª˙ŒÛΩ™√º
+       break;
+     }
