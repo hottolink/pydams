@@ -19,21 +19,31 @@
 * CentOS 7.4 でのインストール手順を紹介します．
 * お使いの環境ではうまくいかないかもしれません．その場合は，DAMSに同梱のREADMEを参照してください．
 
-1. DAMSを[ダウンロード](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=5) して任意のフォルダに解凍します．
+1. 適当な作業ディレクトリに移動します．
+   DAMSを[ダウンロード](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=5) して，ディレクトリ直下に解凍します．
 
 ```
 wget http://newspat.csis.u-tokyo.ac.jp/download/dams-4.3.4.tgz
 tar -xzvf dams-4.3.4.tgz
-cd dams-*
 ```
 
-2. ビルドを行います．共有ライブラリ(`libdams-4.3.4.so`)が生成されます．
+2. パッチを適用します(※)．パッチファイルは，本リポジトリに同梱されています．
 
 ```
+git clone https://github.com/hottolink/pydams.git -b bugfix
+patch -d ./dams-4.3.4 -p1 < ./pydams/patch/dams-4.3.4.diff
+```
+
+※ このパッチにより，例外処理に関するバグが修正されます．
+
+3. ビルドを行います．共有ライブラリ(`libdams-4.3.4.so`)が生成されます．
+
+```
+cd dams-4.3.4
 ./configure; make
 ```
 
-3. 生成された共有ライブラリをインストールして，キャッシュに登録します．
+4. 生成された共有ライブラリをインストールして，キャッシュに登録します．
 
 ```
 sudo make install
@@ -43,7 +53,7 @@ ldconfig -v | grep dams
 >>> libdams-4.3.4.so -> libdams.so
 ```
 
-4. 地域語辞書をビルドしてインストールします．
+5. 地域語辞書をビルドしてインストールします．
 
 ```
 make dic
@@ -51,15 +61,16 @@ sudo make install-dic
 ```
 
 ### Python bindingのインストール
-1. Python binding(=本package)をリポジトリからクローンして，ビルド・インストールを実行します
+1. Python binding(=本package)をリポジトリからクローンして，ビルド・インストールを実行します．
 
 ```
 cd ../
-git clone https://github.com/hottolink/pydams.git
+# パッチ適用時にclone済みの場合は省略
+[ ! -d 'pydams' ] && git clone https://github.com/hottolink/pydams.git -b bugfix
 cd pydams
 # ビルド・テスト・インストールを実行
 make all
-# Anaconda環境ではテストに失敗することがあるようです．この場合はインストールのみ実行してください
+# 一部の環境ではテストに失敗することがあるようです．この場合はインストールのみ実行してください
 make install
 ```
 
@@ -69,7 +80,6 @@ make install
 pip freeze | grep pydams
 >>> pydams==1.0.3
 ```
-
 
 ## 使用方法
 * importしたジオコーダを初期化した上で，`geocode()` または `geocode_simplify()` に住所文字列を渡してください
@@ -127,6 +137,10 @@ http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=4
 ```
 
 * `pydams.helpers` には補助関数が定義されています．docstringを確認の上，適宜ご利用ください
+
+## コンテナ化
+* Dockerコンテナ [python:3.6.10](https://hub.docker.com/_/python) での動作を確認しています．
+  `docker/Dockerfile` を参考にしてください．
 
 ## 謝辞
 本リポジトリは，東京大学空間情報科学研究センターによる[ジオコーダDAMS(Distributed Address Matching System)](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=1)を弊社内でより使いやすくする目的で開発しました．
