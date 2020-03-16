@@ -14,7 +14,7 @@ RUN pip install Cython
 
 # apply patch
 RUN cd /tmp \
-  && git clone https://github.com/hottolink/pydams.git -b bugfix \
+  && git clone https://github.com/hottolink/pydams.git \
   && wget http://newspat.csis.u-tokyo.ac.jp/download/dams-4.3.4.tgz \
   && tar -xzvf dams-4.3.4.tgz \
   && patch -d ./dams-4.3.4 -p1 < ./pydams/patch/dams-4.3.4.diff

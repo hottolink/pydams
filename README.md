@@ -30,7 +30,7 @@ tar -xzvf dams-4.3.4.tgz
 2. パッチを適用します(※)．パッチファイルは，本リポジトリに同梱されています．
 
 ```
-git clone https://github.com/hottolink/pydams.git -b bugfix
+git clone https://github.com/hottolink/pydams.git
 patch -d ./dams-4.3.4 -p1 < ./pydams/patch/dams-4.3.4.diff
 ```
 
@@ -66,7 +66,7 @@ sudo make install-dic
 ```
 cd ../
 # パッチ適用時にclone済みの場合は省略
-[ ! -d 'pydams' ] && git clone https://github.com/hottolink/pydams.git -b bugfix
+[ ! -d 'pydams' ] && git clone https://github.com/hottolink/pydams.git
 cd pydams
 # ビルド・テスト・インストールを実行
 make all
@@ -143,9 +143,10 @@ http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=4
   `docker/Dockerfile` を参考にしてください．
 
 ## 謝辞
-本リポジトリは，東京大学空間情報科学研究センターによる[ジオコーダDAMS(Distributed Address Matching System)](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=1)を弊社内でより使いやすくする目的で開発しました．
-このような便利かつ有用なツールを無償で公開して下さっている東京大学 空間情報科学研究センターに感謝申し上げます。
+* 本リポジトリは，東京大学空間情報科学研究センターによる[ジオコーダDAMS(Distributed Address Matching System)](http://newspat.csis.u-tokyo.ac.jp/geocode/modules/dams/index.php?content_id=1)を弊社内でより使いやすくする目的で開発しました．
+  このような便利かつ有用なツールを無償で公開して下さっている東京大学 空間情報科学研究センターに感謝申し上げます。
+* DAMSプログラムのパッチを提供いただいた [Sangwhan Moon氏](https://www.sangwhan.com/) に感謝いたします。
 
 ## ライセンス
-* 本packageは Apache License Version 2.0 に準拠します
+* 本packageおよびDAMSプログラムのパッチファイルは Apache License Version 2.0 に準拠します
 * 本packageを使用する場合は，DAMSのライセンスに従う必要があります．別途ご確認ください
