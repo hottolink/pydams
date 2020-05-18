@@ -86,14 +86,12 @@ diff -r -u dams-4.3.4/lib/DamsWrapper.cpp dams/lib/DamsWrapper.cpp
      }
  #ifdef DEBUG
      fprintf(stderr, "original   : '%s'\n", euc_query.c_str());
-@@ -173,14 +173,12 @@
-     fprintf(stderr, "nconverted('%s')\n", query);
+@@ -174,13 +174,11 @@
  #endif
      matchlen = nconverted(euc_query.c_str(), result.rest.c_str()); // original
--    if (result.maxlen < 0) {
+     if (result.maxlen < 0) {
 -      std::string msg = "Unexpected return value detected from nconverted, match length is negative value when processing '" + q + "'";
 -      throw DamsException(msg.c_str());
-+    if (result.maxlen < 0 || result.maxlen - abs(matchlen) < 0) {
 +      throw std::runtime_error("Unexpected return value detected from nconverted, match length is negative value when processing '" + q + "'");
      }
  #ifdef DEBUG

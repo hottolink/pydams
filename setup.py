@@ -40,7 +40,7 @@ lst_ext = [
 
 setup(
     name='pydams',
-    version='1.0.3',
+    version='1.0.4',
     description='Python bindings around DAMS: Geocoding Tool for Japanese Address',
     long_description=readme,
     author='Sakae Mizuki',
