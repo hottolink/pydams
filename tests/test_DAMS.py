@@ -84,7 +84,6 @@ class TestDAMS(unittest.TestCase):
         self.assertEqual(returned, expected)
         # self._assert_geocoded_object(returned, expected)
 
-
     def test_geocode_level_1(self):
         DAMS.init_dams()
 
@@ -192,6 +191,16 @@ class TestDAMS(unittest.TestCase):
         }
         self._assert_geocoded_object(returned, expected, distance_eps=200)
 
+    def test_geocode_town_with_chinese_numerals(self):
+        DAMS.init_dams()
+
+        address = "福島県大沼郡金山町越川五十苅象"
+        returned = DAMS.geocode_simplify(address)
+
+        expected = {'score': 5, 'tail': '象', 'candidates': [{'level': 6, 'x': 139.4859161376953, 'y': 37.43180847167969, 'name': '福島県大沼郡金山町越川五十苅'}]}
+
+        self._assert_geocoded_object(returned, expected, distance_eps=200)
+
     def test_pretty_print(self):
         DAMS.init_dams()
 
@@ -206,6 +215,7 @@ class TestDAMS(unittest.TestCase):
             pretty_print(returned)
 
         self.assertTrue(True)
+
 
 if __name__ == "__main__":
     unittest.main()
