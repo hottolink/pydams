@@ -187,6 +187,24 @@ class TestDAMS(unittest.TestCase):
         }
         self._assert_geocoded_object(returned, expected, distance_eps=200)
 
+    def test_geocode_oaza(self):
+        DAMS.init_dams()
+
+        dir_resource = os.path.join(os.path.dirname(__file__), "./resources")
+        oaza_file = os.path.join(dir_resource, "oaza.txt")
+
+        with io.open(oaza_file, mode="r") as ifs:
+            for address in ifs:
+                returned = DAMS.geocode(address)
+                n_candidates = len(returned["candidates"])
+                score = returned["score"]
+                with self.subTest(address=address, score=score, candidates=n_candidates):
+                    if n_candidates == 1:
+                        self.assertGreaterEqual(score, 3)
+                    else:
+                        self.assertGreaterEqual(score, 1)
+
+
     def test_geocode_town_with_chinese_numerals(self):
         DAMS.init_dams()
 
