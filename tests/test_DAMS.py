@@ -71,18 +71,14 @@ class TestDAMS(unittest.TestCase):
         ret = DAMS.init_dams()
         self.assertTrue(ret)
 
-    def test_geocode_error_string(self):
+    def test_geocode_segfault_string(self):
         DAMS.init_dams()
 
         address = "東京都足立区/バイク/スポーツ/仲間集め"
-        returned = DAMS.geocode(address)
-        expected = {
-            "score":0,
-            "tail":"",
-            "candidates":[]
-        }
-        self.assertEqual(returned, expected)
-        # self._assert_geocoded_object(returned, expected)
+        try:
+            returned = DAMS.geocode(address)
+        except Exception as e:
+            self.fail("unexpectedly caught exception.")
 
     def test_geocode_level_1(self):
         DAMS.init_dams()
