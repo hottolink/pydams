@@ -24,7 +24,12 @@ class TestDAMS(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        pass
+        # load testset
+        dir_resource = os.path.join(os.path.dirname(__file__), "./resources")
+        oaza_file = os.path.join(dir_resource, "oaza.txt")
+        with io.open(oaza_file, mode="r") as ifs:
+            lst_oaza = [address.strip() for address in ifs]
+        cls._lst_oaza = lst_oaza
 
     def setUp(self):
         pass
@@ -187,23 +192,32 @@ class TestDAMS(unittest.TestCase):
         }
         self._assert_geocoded_object(returned, expected, distance_eps=200)
 
-    def test_geocode_oaza(self):
+    @unittest.skipIf((sys.version_info.major >= 3 and sys.version_info.minor >= 4) == False, "Python 3.4 or later.")
+    def test_geocode_oaza_subtest(self):
         DAMS.init_dams()
 
-        dir_resource = os.path.join(os.path.dirname(__file__), "./resources")
-        oaza_file = os.path.join(dir_resource, "oaza.txt")
+        for address in self._lst_oaza:
+            returned = DAMS.geocode(address)
+            n_candidates = len(returned["candidates"])
+            score = returned["score"]
+            with self.subTest(address=address, score=score, candidates=n_candidates):
+                if n_candidates == 1:
+                    self.assertGreaterEqual(score, 3)
+                else:
+                    self.assertGreaterEqual(score, 1)
 
-        with io.open(oaza_file, mode="r") as ifs:
-            for address in ifs:
-                returned = DAMS.geocode(address)
-                n_candidates = len(returned["candidates"])
-                score = returned["score"]
-                with self.subTest(address=address, score=score, candidates=n_candidates):
-                    if n_candidates == 1:
-                        self.assertGreaterEqual(score, 3)
-                    else:
-                        self.assertGreaterEqual(score, 1)
+    @unittest.skipIf((sys.version_info.major >= 3 and sys.version_info.minor >= 4) == True, "Python 3.4 or earlier.")
+    def test_geocode_oaza_batch(self):
+        DAMS.init_dams()
 
+        for address in self._lst_oaza:
+            returned = DAMS.geocode(address)
+            n_candidates = len(returned["candidates"])
+            score = returned["score"]
+            if n_candidates == 1:
+                self.assertGreaterEqual(score, 3)
+            else:
+                self.assertGreaterEqual(score, 1)
 
     def test_geocode_town_with_chinese_numerals(self):
         DAMS.init_dams()
