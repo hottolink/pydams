@@ -78,7 +78,7 @@ make install
 
 ```
 pip freeze | grep pydams
->>> pydams==1.0.3
+>>> pydams==1.0.4
 ```
 
 ## 使用方法
